@@ -39,6 +39,7 @@ fig.add_trace(go.Scatter(x=df.date, y=df.close,
 fig.update_layout(showlegend=True)
 fig.show()
 ```
+![fig](Figs/F1.JPG)
 
 ## Data Preprocessing
 ```
@@ -92,6 +93,7 @@ model = Sequential([
 model.compile(loss='mae', optimizer='adam')
 model.summary()
 ```
+![fig](Figs/Summary.JPG)
 ## Training 
 ```
 es = tf.keras.callbacks.EarlyStopping(monitor='val_loss', patience=3, mode='min')
@@ -111,6 +113,7 @@ plt.plot(history.history['loss'], label='Training Loss')
 plt.plot(history.history['val_loss'], label='Validation Loss')
 plt.legend();
 ```
+![fig](Figs/F2.JPG)
 
 ```
 X_train_pred = model.predict(X_train)
@@ -125,7 +128,7 @@ model.evaluate(X_test, y_test)
 sns.distplot(train_mae_loss, bins=50, kde=True);
 
 ```
-
+![fig](Figs/F3.JPG)
 
 ```
 X_test_pred = model.predict(X_test)
@@ -134,6 +137,7 @@ test_mae_loss = np.mean(np.abs(X_test_pred - X_test), axis=1)
 sns.distplot(test_mae_loss, bins=50, kde=True);
 
 ```
+![fig](Figs/F4.JPG)
 
 ## Detect Anomalies in the S&P 500 Index Data
 ```
@@ -155,4 +159,25 @@ fig.update_layout(showlegend=True)
 fig.show()
 
 ```
+![fig](Figs/F5.JPG)
+
+
+```
+anomalies = test_score_df[test_score_df.anomaly == True]
+anomalies.head()
+```
+![fig](Figs/F6.JPG)
+
+```
+fig = go.Figure()
+fig.add_trace(go.Scatter(x=test[time_steps:].date, y=scaler.inverse_transform(test[time_steps:].close),
+                    mode='lines',
+                    name='Close Price'))
+fig.add_trace(go.Scatter(x=anomalies.date, y=scaler.inverse_transform(anomalies.close),
+                    mode='markers',
+                    name='Anomaly'))
+fig.update_layout(showlegend=True)
+fig.show()
+```
+![fig](Figs/F7.JPG)
 
